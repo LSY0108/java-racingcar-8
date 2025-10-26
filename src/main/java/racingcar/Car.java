@@ -22,4 +22,9 @@ public class Car {
     public int getPosition() {
         return position;
     }
+
+    /* 자동차 이동 거리 표현 */
+    public String getShowPosition() {
+        return "-".repeat(position);
+    }
 }
