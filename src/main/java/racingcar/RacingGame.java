@@ -1,10 +1,61 @@
 package racingcar;
 
-public class RacingGame {
+import camp.nextstep.edu.missionutils.Randoms;
 
-    public RacingGame(String carNameInput, String playCountInput){
-        checkCarNames(carNameInput);
+import java.util.ArrayList;
+import java.util.List;
+
+public class RacingGame {
+    private final List<Car> cars = new ArrayList<>();
+    private final int playCount;
+
+    public RacingGame(String carNamesInput, String playCountInput){
+        checkCarNames(carNamesInput);
         checkPlayCount(playCountInput);
+
+        for (String name : carNamesInput.split(",")) {
+            cars.add(new Car(name.trim()));
+        }
+        this.playCount = Integer.parseInt(playCountInput);
+    }
+
+    /* 자동차 경주 실행 */
+    public void play() {
+        for (int i = 0; i < playCount; i++){
+            race();
+        }
+    }
+
+    /* 각 자동차 이동 여부 결정 */
+    private void race() {
+        for (Car car : cars) {
+            int randomNumber = Randoms.pickNumberInRange(0, 9);
+            if (randomNumber >= 4) {
+                car.move();
+            }
+        }
+    }
+
+    /* 최종 우승자 계산 */
+    private List<String> getWinners() {
+        List<String> winners = new ArrayList<>();
+
+        // 1. 가장 많이 이동한 거리 찾기
+        int maxPosition = 0;
+        for (Car car : cars) {
+            if(car.getPosition() > maxPosition) {
+                maxPosition = car.getPosition();
+            }
+        }
+
+        // 2. 최대 거리와 같은 자동차 이름만 winners 리스트에 추가
+        for (Car car : cars) {
+            if(car.getPosition() == maxPosition) {
+                winners.add(car.getName());
+            }
+        }
+
+        return winners;
     }
 
     /* 자동차 이름 입력값 검증 */
